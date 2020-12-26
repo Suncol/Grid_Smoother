@@ -7,7 +7,7 @@ import smooth_core.ploter as ploter
 
 # A 2d mesh smoother by solving the elliptic mesh pde. 
 
-@jit(nopython=True)
+# numpy vectorize seems incompatible with numba jit
 def elliptic_mesh(x, y, convCrit, maxit): 
 
     '''
