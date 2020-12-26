@@ -1,10 +1,13 @@
 import math
 import numpy as np
 from scipy.optimize import curve_fit
+from numba import jit # using numba jit to speed up
 
 import smooth_core.ploter as ploter
 
 # A 2d mesh smoother by solving the elliptic mesh pde. 
+
+@jit(nopython=True)
 def elliptic_mesh(x, y, convCrit, maxit): 
 
     '''
@@ -71,6 +74,7 @@ def elliptic_mesh(x, y, convCrit, maxit):
 
 
 # laplace smoothing
+@jit(nopython=True)
 def laplacesmoothing(x, y, omega, targetError, maxit):
     iMax, jMax = x.shape
 
@@ -131,6 +135,7 @@ def laplacesmoothing(x, y, omega, targetError, maxit):
 
 
 # fit the edge points that make the x axis bad, the most outside point?
+@jit(nopython=True)
 def edge_fit(x, y):
     iMax, jMax = x.shape
     for i in range(1,iMax-1):
@@ -149,6 +154,7 @@ def edge_fit(x, y):
 
 
 # get the func root
+@jit(nopython=True)
 def biSection(a,b,threshold,f,maxit):
     iter=0
     while a<b:
@@ -166,7 +172,7 @@ def biSection(a,b,threshold,f,maxit):
 
     return (a + b) / 2.0
 
-
+@jit(nopython=True)
 def BoundaryNormalization(X, Y):
     iMax, jMax = X.shape 
 
@@ -232,7 +238,7 @@ def BoundaryNormalization(X, Y):
 
     return (u, v)
 
-
+@jit(nopython=True)
 def BoundaryBlendedControlFunction(u, v):
     iMax, jMax = u.shape
 
@@ -249,7 +255,7 @@ def BoundaryBlendedControlFunction(u, v):
 
     return (u, v)
 
-
+@jit(nopython=True)
 def TFI(X, Y, u, v):    
     iMax, jMax = X.shape
 
